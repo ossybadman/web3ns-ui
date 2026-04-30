@@ -39,19 +39,23 @@ function AppsIcon({ className }: IconProps) {
 function ChainsIcon({ className }: IconProps) {
   return (
     <svg {...ICON_BASE_PROPS} className={className}>
-      <path d="M9.5 14.5l5-5" />
-      <path d="M7 12.5l-1.5 1.5a3.5 3.5 0 0 0 4.95 4.95l2-2" />
-      <path d="M17 11.5l1.5-1.5a3.5 3.5 0 0 0-4.95-4.95l-2 2" />
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 8v8" />
+      <path d="M8 12h8" />
     </svg>
   );
 }
 
 function IntegrationIcon({ className }: IconProps) {
   return (
-    <svg {...ICON_BASE_PROPS} className={className}>
-      <rect x="3" y="3" width="7" height="7" rx="1.5" />
-      <rect x="14" y="14" width="7" height="7" rx="1.5" />
-      <path d="M6.5 10v3a2.5 2.5 0 0 0 2.5 2.5h5" />
+    <svg
+      {...ICON_BASE_PROPS}
+      className={className}
+      strokeWidth={1.25}
+    >
+      <path d="M9 8l-4 4 4 4" />
+      <path d="M15 8l4 4-4 4" />
+      <path d="M14 5l-4 14" />
     </svg>
   );
 }
@@ -74,18 +78,26 @@ function SettingsIcon({ className }: IconProps) {
   );
 }
 
-function ChevronLeftIcon({ className }: IconProps) {
+function ChevronDownIcon({ className }: IconProps) {
   return (
     <svg {...ICON_BASE_PROPS} className={className}>
-      <path d="M15 6l-6 6 6 6" />
+      <path d="M6 9l6 6 6-6" />
     </svg>
   );
 }
 
-function ChevronRightIcon({ className }: IconProps) {
+function ToggleIcon({
+  expanded,
+  className,
+}: {
+  expanded: boolean;
+  className?: string;
+}) {
   return (
     <svg {...ICON_BASE_PROPS} className={className}>
-      <path d="M9 6l6 6-6 6" />
+      <rect x="3.5" y="4.5" width="17" height="15" rx="2" />
+      <path d="M9.5 4.5v15" />
+      {expanded ? <path d="M15 9l-3 3 3 3" /> : <path d="M13 9l3 3-3 3" />}
     </svg>
   );
 }
@@ -95,18 +107,22 @@ type Item = {
   icon: (props: IconProps) => React.JSX.Element;
 };
 
-const TOP_ITEMS: Item[] = [
+const PRIMARY_ITEMS: Item[] = [
   { label: "Overview", icon: HomeIcon },
   { label: "Apps", icon: AppsIcon },
   { label: "Chains", icon: ChainsIcon },
+];
+
+const PRODUCT_ITEMS: Item[] = [
   { label: "Integration", icon: IntegrationIcon },
   { label: "Skills", icon: SkillsIcon },
 ];
 
-const BOTTOM_ITEMS: Item[] = [{ label: "Settings", icon: SettingsIcon }];
+const SETTINGS_SUBITEMS = ["Billing", "Appearance", "Language", "Notification"];
 
 export function Sidebar() {
   const [expanded, setExpanded] = useState(true);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -131,14 +147,25 @@ export function Sidebar() {
       aria-label="Primary navigation"
     >
       <nav className="flex flex-1 flex-col gap-1 px-2 py-3">
-        {TOP_ITEMS.map((item) => (
+        {PRIMARY_ITEMS.map((item) => (
           <SidebarItem key={item.label} item={item} expanded={expanded} />
         ))}
 
-        <div className="mt-auto flex flex-col gap-1 border-t border-hairline pt-3">
-          {BOTTOM_ITEMS.map((item) => (
-            <SidebarItem key={item.label} item={item} expanded={expanded} />
-          ))}
+        <Divider />
+
+        {PRODUCT_ITEMS.map((item) => (
+          <SidebarItem key={item.label} item={item} expanded={expanded} />
+        ))}
+
+        <Divider />
+
+        <SettingsGroup
+          expanded={expanded}
+          open={settingsOpen}
+          onToggle={() => setSettingsOpen((v) => !v)}
+        />
+
+        <div className="mt-auto flex flex-col gap-1">
           <ToggleRow
             expanded={expanded}
             onToggle={() => setExpanded((v) => !v)}
@@ -147,6 +174,10 @@ export function Sidebar() {
       </nav>
     </aside>
   );
+}
+
+function Divider() {
+  return <div role="separator" className="my-1.5 h-px bg-hairline" />;
 }
 
 function SidebarItem({ item, expanded }: { item: Item; expanded: boolean }) {
@@ -171,6 +202,61 @@ function SidebarItem({ item, expanded }: { item: Item; expanded: boolean }) {
   );
 }
 
+function SettingsGroup({
+  expanded,
+  open,
+  onToggle,
+}: {
+  expanded: boolean;
+  open: boolean;
+  onToggle: () => void;
+}) {
+  const showSubItems = expanded && open;
+  return (
+    <div className="flex flex-col gap-1">
+      <button
+        type="button"
+        onClick={expanded ? onToggle : undefined}
+        className={`group flex h-9 items-center gap-3 rounded-md text-[13.5px] text-ink transition hover:bg-subtle ${
+          expanded ? "px-2.5" : "justify-center px-0"
+        }`}
+        aria-expanded={expanded ? open : undefined}
+        title={expanded ? undefined : "Settings"}
+      >
+        <SettingsIcon className="h-[18px] w-[18px] shrink-0 text-ink" />
+        <span
+          className={`flex-1 text-left overflow-hidden whitespace-nowrap transition-[opacity,max-width] duration-200 ${
+            expanded ? "max-w-[160px] opacity-100" : "max-w-0 opacity-0"
+          }`}
+        >
+          Settings
+        </span>
+        {expanded ? (
+          <ChevronDownIcon
+            className={`h-4 w-4 shrink-0 text-muted transition-transform duration-150 ${
+              open ? "rotate-180" : ""
+            }`}
+          />
+        ) : null}
+      </button>
+
+      {showSubItems ? (
+        <div className="flex flex-col">
+          {SETTINGS_SUBITEMS.map((label) => (
+            <button
+              key={label}
+              type="button"
+              className="flex h-8 items-center rounded-md pl-[42px] pr-2.5 text-[13px] text-muted transition hover:bg-subtle hover:text-ink"
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 function ToggleRow({
   expanded,
   onToggle,
@@ -178,7 +264,6 @@ function ToggleRow({
   expanded: boolean;
   onToggle: () => void;
 }) {
-  const Icon = expanded ? ChevronLeftIcon : ChevronRightIcon;
   return (
     <button
       type="button"
@@ -190,7 +275,10 @@ function ToggleRow({
       aria-expanded={expanded}
       title={expanded ? undefined : "Expand"}
     >
-      <Icon className="h-[18px] w-[18px] shrink-0" />
+      <ToggleIcon
+        expanded={expanded}
+        className="h-[18px] w-[18px] shrink-0"
+      />
       <span
         className={`overflow-hidden whitespace-nowrap transition-[opacity,max-width] duration-200 ${
           expanded ? "max-w-[160px] opacity-100" : "max-w-0 opacity-0"
