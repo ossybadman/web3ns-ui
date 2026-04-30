@@ -63,6 +63,44 @@ function ChainsIcon({ className }: IconProps) {
   );
 }
 
+function IntegrationIcon({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <rect x="3" y="8" width="6" height="8" rx="1.25" />
+      <rect x="15" y="8" width="6" height="8" rx="1.25" />
+      <path d="M9 12h6" />
+    </svg>
+  );
+}
+
+function SkillsIcon({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M12 4l1.6 4.4L18 10l-4.4 1.6L12 16l-1.6-4.4L6 10l4.4-1.6L12 4z" />
+      <path d="M18.5 16l.6 1.6 1.6.6-1.6.6-.6 1.6-.6-1.6-1.6-.6 1.6-.6.6-1.6z" />
+      <path d="M5 16.5l.4 1 1 .4-1 .4-.4 1-.4-1-1-.4 1-.4.4-1z" />
+    </svg>
+  );
+}
+
 function SettingsIcon({ className }: IconProps) {
   return (
     <svg
@@ -109,6 +147,8 @@ const TOP_ITEMS: Item[] = [
   { label: "Overview", icon: HomeIcon },
   { label: "Apps", icon: AppsIcon },
   { label: "Chains", icon: ChainsIcon },
+  { label: "Integration", icon: IntegrationIcon },
+  { label: "Skills", icon: SkillsIcon },
 ];
 
 const BOTTOM_ITEMS: Item[] = [{ label: "Settings", icon: SettingsIcon }];
