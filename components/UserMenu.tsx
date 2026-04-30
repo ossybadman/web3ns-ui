@@ -65,24 +65,13 @@ export function UserMenu({ name, email, image, signOutAction }: Props) {
       {open ? (
         <div
           role="menu"
-          className="absolute right-0 top-[calc(100%+8px)] z-40 w-56 overflow-hidden rounded-md border border-hairline bg-paper shadow-card"
+          className="absolute right-0 top-[calc(100%+6px)] z-40 w-44 overflow-hidden rounded-md border border-hairline bg-paper py-1 shadow-card"
         >
-          <div className="px-3 py-2.5">
-            <div className="truncate text-[13px] font-medium text-ink">
-              {name ?? email ?? "Account"}
-            </div>
-            {email && name ? (
-              <div className="mt-0.5 truncate text-[12px] text-muted">
-                {email}
-              </div>
-            ) : null}
-          </div>
-          <div className="border-t border-hairline" />
           <Link
             href="/profile"
             role="menuitem"
             onClick={() => setOpen(false)}
-            className="flex h-9 items-center px-3 text-[13px] text-ink transition hover:bg-subtle"
+            className="flex h-8 items-center px-3 text-[12.5px] text-ink transition hover:bg-subtle"
           >
             Profile
           </Link>
@@ -90,7 +79,7 @@ export function UserMenu({ name, email, image, signOutAction }: Props) {
             <button
               type="submit"
               role="menuitem"
-              className="flex h-9 w-full items-center px-3 text-left text-[13px] text-ink transition hover:bg-subtle"
+              className="flex h-8 w-full items-center px-3 text-left text-[12.5px] text-ink transition hover:bg-subtle"
             >
               Sign out
             </button>

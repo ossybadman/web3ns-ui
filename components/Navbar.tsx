@@ -21,7 +21,9 @@ export async function Navbar() {
             <>
               <Link
                 href="/docs"
-                className="rounded-md px-3 py-1.5 text-[13px] text-ink transition hover:bg-subtle"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-8 items-center rounded-md border border-hairline bg-paper px-3 text-[13px] text-ink transition hover:border-ink"
               >
                 Docs
               </Link>
