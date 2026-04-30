@@ -2,6 +2,7 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { Navbar } from "@/components/Navbar";
+import { Sidebar } from "@/components/Sidebar";
 import { ChainCard } from "@/components/ChainCard";
 import { CopyButton } from "@/components/CopyButton";
 import { IntegrationTabs } from "@/components/IntegrationTabs";
@@ -16,10 +17,13 @@ export default async function DashboardPage() {
   const totalTools = chains.reduce((sum, c) => sum + c.toolCount, 0);
 
   return (
-    <div className="min-h-screen">
-      <Navbar />
+    <div className="flex min-h-screen">
+      <Sidebar />
 
-      <main className="mx-auto max-w-6xl px-5 py-10 sm:py-14">
+      <div className="flex min-w-0 flex-1 flex-col">
+        <Navbar />
+
+        <main className="mx-auto w-full max-w-6xl px-5 py-10 sm:py-14">
         <section className="flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
             {user.image ? (
@@ -98,11 +102,12 @@ export default async function DashboardPage() {
         </section>
       </main>
 
-      <footer className="border-t border-hairline">
-        <div className="mx-auto max-w-6xl px-5 py-8 font-mono text-[12px] text-muted">
-          © web3ns
-        </div>
-      </footer>
+        <footer className="border-t border-hairline">
+          <div className="mx-auto max-w-6xl px-5 py-8 font-mono text-[12px] text-muted">
+            © web3ns
+          </div>
+        </footer>
+      </div>
     </div>
   );
 }
